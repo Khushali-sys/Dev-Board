@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DevBoard - Developer Productivity Dashboard</title>
+  <meta name="description" content="A customizable developer productivity dashboard with tasks, weather, news, notes and more." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;700&family=Familjen+Grotesk:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/widgets.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+  <header class="topbar" id="topbar">
+    <div class="topbar__left">
+      <div class="topbar__logo">
+        <span class="topbar__logo-icon">DB</span>
+        <span class="topbar__logo-text">Dev<strong>Board</strong></span>
+      </div>
+      <div class="topbar__greeting" id="greeting">
+        <span id="greetingText">Good morning</span>,
+        <span class="topbar__username" id="usernameDisplay" contenteditable="true" spellcheck="false" title="Click to edit">Developer</span>
+      </div>
+    </div>
+
+    <div class="topbar__center">
+      <div class="topbar__clock" id="clock">
+        <span id="clockTime">00:00:00</span>
+        <span class="topbar__clock-date" id="clockDate">Mon, Jan 01</span>
+      </div>
+    </div>
+
+    <div class="topbar__right">
+      <div class="topbar__widget-controls" id="widgetControls">
+        <span class="topbar__control-label">Widgets</span>
+        <button class="widget-toggle-btn active" data-widget="tasks" title="Toggle Tasks">Task</button>
+        <button class="widget-toggle-btn active" data-widget="weather" title="Toggle Weather">Sky</button>
+        <button class="widget-toggle-btn active" data-widget="news" title="Toggle News">News</button>
+        <button class="widget-toggle-btn active" data-widget="notes" title="Toggle Notes">Note</button>
+        <button class="widget-toggle-btn active" data-widget="stats" title="Toggle Stats">Stat</button>
+      </div>
+
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme" title="Toggle dark/light mode">
+        <span class="theme-toggle__icon" id="themeIcon">Moon</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="dashboard" id="dashboard">
+    <section class="widget widget--weather" id="widget-weather" data-widget-id="weather" draggable="true">
+      <div class="widget__drag-handle" title="Drag to reorder">::</div>
+      <div class="widget__header">
+        <h2 class="widget__title">
+          <span class="widget__title-icon">Sky</span> Weather
+        </h2>
+        <div class="widget__header-actions">
+          <input type="text" class="weather-city-input" id="weatherCityInput" placeholder="Enter city..." value="Bengaluru" />
+          <button class="icon-btn" id="weatherRefresh" title="Refresh weather">R</button>
+        </div>
+      </div>
+      <div class="widget__body weather-body" id="weatherBody">
+        <div class="weather-skeleton" id="weatherSkeleton">
+          <div class="skeleton-line skeleton-line--lg"></div>
+          <div class="skeleton-line skeleton-line--sm"></div>
+          <div class="skeleton-line"></div>
+        </div>
+        <div class="weather-content" id="weatherContent" style="display:none">
+          <div class="weather-main">
+            <div class="weather-icon" id="weatherIcon">Clear</div>
+            <div class="weather-temp" id="weatherTemp">--°C</div>
+          </div>
+          <div class="weather-city" id="weatherCity">--</div>
+          <div class="weather-condition" id="weatherCondition">--</div>
+          <div class="weather-details">
+            <div class="weather-detail">
+              <span class="weather-detail__label">Humidity</span>
+              <span class="weather-detail__val" id="weatherHumidity">--%</span>
+            </div>
+            <div class="weather-detail">
+              <span class="weather-detail__label">Wind</span>
+              <span class="weather-detail__val" id="weatherWind">-- km/h</span>
+            </div>
+            <div class="weather-detail">
+              <span class="weather-detail__label">Feels like</span>
+              <span class="weather-detail__val" id="weatherFeels">--°C</span>
+            </div>
+          </div>
+        </div>
+        <div class="weather-error" id="weatherError" style="display:none">
+          <span>Weather could not be loaded.</span>
+          <small>Check the API key in <code>js/config.js</code></small>
+        </div>
+      </div>
+    </section>
+
+    <section class="widget widget--clock" id="widget-clock">
+      <div class="widget__body clock-body">
+        <div class="clock-display">
+          <div class="clock-time" id="clockBig">00:00</div>
+          <div class="clock-seconds" id="clockSecs">:00</div>
+        </div>
+        <div class="clock-date-full" id="clockFull">Monday, January 1 2025</div>
+        <div class="clock-ampm" id="clockAmPm">AM</div>
+        <div class="clock-timezone">
+          <span>Zone</span>
+          <span id="clockTz">Asia/Kolkata</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="widget widget--tasks" id="widget-tasks" data-widget-id="tasks" draggable="true">
+      <div class="widget__drag-handle" title="Drag to reorder">::</div>
+      <div class="widget__header">
+        <h2 class="widget__title">
+          <span class="widget__title-icon">Task</span> Tasks
+          <span class="tasks-badge" id="tasksBadge">0</span>
+        </h2>
+        <div class="widget__header-actions">
+          <select class="task-filter" id="taskFilter">
+            <option value="all">All</option>
+            <option value="active">Active</option>
+            <option value="done">Done</option>
+          </select>
+        </div>
+      </div>
+      <div class="widget__body tasks-body">
+        <div class="task-input-row">
+          <input type="text" class="task-input" id="taskInput" placeholder="Add a new task... (Enter to add)" maxlength="120" />
+          <select class="task-priority" id="taskPriority" title="Priority">
+            <option value="low">Low</option>
+            <option value="medium" selected>Med</option>
+            <option value="high">High</option>
+          </select>
+          <button class="btn-add" id="taskAddBtn" title="Add task">+</button>
+        </div>
+        <ul class="task-list" id="taskList"></ul>
+        <div class="tasks-footer">
+          <span class="tasks-count" id="tasksCount">0 remaining</span>
+          <button class="btn-link" id="clearDoneBtn">Clear done</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="widget widget--news" id="widget-news" data-widget-id="news" draggable="true">
+      <div class="widget__drag-handle" title="Drag to reorder">::</div>
+      <div class="widget__header widget__header--stackable">
+        <h2 class="widget__title">
+          <span class="widget__title-icon">News</span> News Feed
+        </h2>
+        <div class="widget__header-actions widget__header-actions--news">
+          <select class="news-category" id="newsCategory">
+            <option value="technology">Technology</option>
+            <option value="science">Science</option>
+            <option value="general">General</option>
+            <option value="business">Business</option>
+            <option value="health">Health</option>
+            <option value="sports">Sports</option>
+            <option value="entertainment">Entertainment</option>
+          </select>
+          <button class="icon-btn" id="newsRefresh" title="Refresh news">R</button>
+        </div>
+      </div>
+      <div class="widget__body news-body" id="newsBody">
+        <div class="news-skeleton" id="newsSkeleton">
+          <div class="news-skeleton__item">
+            <div class="skeleton-line"></div>
+            <div class="skeleton-line skeleton-line--sm"></div>
+          </div>
+        </div>
+        <ul class="news-list" id="newsList" style="display:none"></ul>
+        <div class="news-error" id="newsError" style="display:none">
+          <span>News is unavailable.</span>
+          <small>Add your NewsAPI key in <code>js/config.js</code></small>
+        </div>
+      </div>
+    </section>
+
+    <section class="widget widget--notes" id="widget-notes" data-widget-id="notes" draggable="true">
+      <div class="widget__drag-handle" title="Drag to reorder">::</div>
+      <div class="widget__header widget__header--stackable">
+        <h2 class="widget__title">
+          <span class="widget__title-icon">Note</span> Quick Notes
+        </h2>
+        <div class="widget__header-actions">
+          <button class="note-add-btn" id="noteAddBtn" title="New note">+ Note</button>
+        </div>
+      </div>
+      <div class="widget__body notes-body" id="notesBody">
+        <div class="notes-grid" id="notesGrid"></div>
+        <div class="notes-empty" id="notesEmpty">
+          <span>No notes yet.</span>
+          <small>Click "+ Note" to add one.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="widget widget--stats" id="widget-stats" data-widget-id="stats" draggable="true">
+      <div class="widget__drag-handle" title="Drag to reorder">::</div>
+      <div class="widget__header">
+        <h2 class="widget__title">
+          <span class="widget__title-icon">Stat</span> Today's Stats
+        </h2>
+      </div>
+      <div class="widget__body stats-body">
+        <div class="stats-grid">
+          <div class="stat-card stat-card--tasks">
+            <div class="stat-card__num" id="statTasksTotal">0</div>
+            <div class="stat-card__label">Total Tasks</div>
+            <div class="stat-card__bar"><div class="stat-card__fill" id="statTasksBar" style="width:0%"></div></div>
+          </div>
+          <div class="stat-card stat-card--done">
+            <div class="stat-card__num" id="statTasksDone">0</div>
+            <div class="stat-card__label">Completed</div>
+            <div class="stat-card__bar"><div class="stat-card__fill" id="statDoneBar" style="width:0%"></div></div>
+          </div>
+          <div class="stat-card stat-card--notes">
+            <div class="stat-card__num" id="statNotes">0</div>
+            <div class="stat-card__label">Notes</div>
+          </div>
+          <div class="stat-card stat-card--streak">
+            <div class="stat-card__num" id="statStreak">1</div>
+            <div class="stat-card__label">Day Streak</div>
+          </div>
+        </div>
+        <div class="progress-section">
+          <div class="progress-label">
+            <span>Daily Progress</span>
+            <span id="progressPct">0%</span>
+          </div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="pomodoro-section">
+          <div class="pomodoro-label">
+            <span>Pomodoro</span>
+            <span class="pomodoro-state" id="pomodoroState">Focus</span>
+          </div>
+          <div class="pomodoro-timer" id="pomodoroTimer">25:00</div>
+          <div class="pomodoro-controls">
+            <button class="pom-btn" id="pomStart">Start</button>
+            <button class="pom-btn pom-btn--ghost" id="pomReset">Reset</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal-overlay" id="noteModal" style="display:none">
+    <div class="modal">
+      <div class="modal__header">
+        <h3 class="modal__title">Edit Note</h3>
+        <button class="modal__close" id="noteModalClose">X</button>
+      </div>
+      <div class="modal__body">
+        <input type="text" class="modal__input" id="noteTitleInput" placeholder="Note title..." maxlength="60" />
+        <textarea class="modal__textarea" id="noteBodyInput" placeholder="Write your note here..." rows="6" maxlength="500"></textarea>
+        <div class="modal__colors">
+          <span class="modal__color-label">Color:</span>
+          <button class="note-color active" data-color="yellow" style="background:#f5e642" title="Yellow"></button>
+          <button class="note-color" data-color="green" style="background:#42f569" title="Green"></button>
+          <button class="note-color" data-color="blue" style="background:#42b8f5" title="Blue"></button>
+          <button class="note-color" data-color="pink" style="background:#f542a1" title="Pink"></button>
+          <button class="note-color" data-color="orange" style="background:#f5a042" title="Orange"></button>
+        </div>
+      </div>
+      <div class="modal__footer">
+        <button class="btn btn--ghost" id="noteModalCancel">Cancel</button>
+        <button class="btn btn--primary" id="noteModalSave">Save Note</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/modules/clock.js"></script>
+  <script src="js/modules/theme.js"></script>
+  <script src="js/modules/tasks.js"></script>
+  <script src="js/modules/weather.js"></script>
+  <script src="js/modules/news.js"></script>
+  <script src="js/modules/notes.js"></script>
+  <script src="js/modules/stats.js"></script>
+  <script src="js/modules/pomodoro.js"></script>
+  <script src="js/modules/dragdrop.js"></script>
+  <script src="js/modules/widgetToggle.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

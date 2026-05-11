@@ -1,0 +1,93 @@
+/* ============================================================
+   DEVBOARD - DESIGN TOKENS
+   ============================================================ */
+
+[data-theme="dark"] {
+  --bg: #18324a;
+  --bg-2: #234661;
+  --surface: rgba(255, 255, 255, 0.12);
+  --surface-2: rgba(255, 255, 255, 0.18);
+  --surface-3: rgba(255, 255, 255, 0.24);
+  --border: rgba(255, 255, 255, 0.22);
+  --border-hover: rgba(255, 255, 255, 0.35);
+
+  --text-primary: #f7fbff;
+  --text-secondary: #dbe9f5;
+  --text-muted: #b8cede;
+
+  --accent: #ffd166;
+  --accent-2: #8de3ff;
+  --accent-3: #ff8fab;
+  --accent-warm: #ffb347;
+
+  --accent-dim: rgba(255, 209, 102, 0.18);
+  --accent-glow: rgba(255, 209, 102, 0.28);
+
+  --shadow: 0 16px 40px rgba(9, 28, 43, 0.24);
+  --shadow-sm: 0 4px 12px rgba(9, 28, 43, 0.16);
+
+  --widget-bg: var(--surface);
+  --widget-border: var(--border);
+
+  --skeleton-base: rgba(255, 255, 255, 0.16);
+  --skeleton-shine: rgba(255, 255, 255, 0.28);
+
+  --note-yellow: rgba(255, 209, 102, 0.22);
+  --note-green: rgba(109, 234, 161, 0.2);
+  --note-blue: rgba(141, 227, 255, 0.22);
+  --note-pink: rgba(255, 143, 171, 0.2);
+  --note-orange: rgba(255, 179, 71, 0.22);
+}
+
+[data-theme="light"] {
+  --bg: #eef7ff;
+  --bg-2: #dcefff;
+  --surface: rgba(255, 255, 255, 0.88);
+  --surface-2: rgba(255, 255, 255, 0.96);
+  --surface-3: #f2f8ff;
+  --border: rgba(59, 92, 122, 0.12);
+  --border-hover: rgba(59, 92, 122, 0.24);
+
+  --text-primary: #16324a;
+  --text-secondary: #34506c;
+  --text-muted: #5f7791;
+
+  --accent: #1570ef;
+  --accent-2: #00a3a3;
+  --accent-3: #d9487d;
+  --accent-warm: #d97706;
+
+  --accent-dim: rgba(21, 112, 239, 0.12);
+  --accent-glow: rgba(21, 112, 239, 0.2);
+
+  --shadow: 0 18px 40px rgba(79, 120, 160, 0.16);
+  --shadow-sm: 0 4px 12px rgba(79, 120, 160, 0.08);
+
+  --widget-bg: var(--surface);
+  --widget-border: var(--border);
+
+  --skeleton-base: #dbe9f7;
+  --skeleton-shine: #f4f9ff;
+
+  --note-yellow: rgba(255, 214, 102, 0.22);
+  --note-green: rgba(110, 231, 183, 0.2);
+  --note-blue: rgba(125, 211, 252, 0.22);
+  --note-pink: rgba(244, 114, 182, 0.18);
+  --note-orange: rgba(251, 191, 36, 0.22);
+}
+
+:root {
+  --font-display: 'Familjen Grotesk', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 24px;
+
+  --transition: cubic-bezier(0.23, 1, 0.32, 1);
+
+  --widget-gap: 16px;
+  --topbar-h: 72px;
+}

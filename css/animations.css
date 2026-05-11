@@ -1,0 +1,131 @@
+/* ============================================================
+   DEVBOARD — ANIMATIONS
+   ============================================================ */
+
+/* ── ENTRY ANIMATIONS ── */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-10px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideOut {
+  from { opacity: 1; transform: translateX(0); height: auto; }
+  to   { opacity: 0; transform: translateX(10px); height: 0; padding: 0; margin: 0; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes noteIn {
+  from { opacity: 0; transform: scale(0.9) rotate(-2deg); }
+  to   { opacity: 1; transform: scale(1) rotate(0deg); }
+}
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(20px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(20px); }
+}
+
+@keyframes widgetEntrance {
+  from { opacity: 0; transform: translateY(20px) scale(0.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ── WIDGET ENTRANCE STAGGER ── */
+.widget:nth-child(1) { animation: widgetEntrance 0.5s ease 0.05s both; }
+.widget:nth-child(2) { animation: widgetEntrance 0.5s ease 0.10s both; }
+.widget:nth-child(3) { animation: widgetEntrance 0.5s ease 0.15s both; }
+.widget:nth-child(4) { animation: widgetEntrance 0.5s ease 0.20s both; }
+.widget:nth-child(5) { animation: widgetEntrance 0.5s ease 0.25s both; }
+.widget:nth-child(6) { animation: widgetEntrance 0.5s ease 0.30s both; }
+
+/* ── SECONDS TICK ── */
+.clock-seconds {
+  transition: opacity 0.1s;
+}
+
+/* ── THEME TRANSITION ── */
+body,
+.topbar,
+.widget,
+.modal,
+.task-item,
+.note-card {
+  transition:
+    background-color 0.35s var(--transition),
+    border-color 0.35s var(--transition),
+    color 0.35s var(--transition);
+}
+
+/* ── WEATHER ICON FLOAT ── */
+.weather-icon {
+  animation: iconFloat 4s ease-in-out infinite;
+  display: inline-block;
+}
+
+@keyframes iconFloat {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+/* ── REFRESH SPIN ── */
+.icon-btn.spinning {
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── TASK COMPLETE FLASH ── */
+.task-item.just-completed {
+  animation: completeFlash 0.4s ease;
+}
+
+@keyframes completeFlash {
+  0%   { background: var(--surface-2); }
+  50%  { background: var(--accent-dim); }
+  100% { background: var(--surface-2); }
+}
+
+/* ── POMODORO PULSE (on run) ── */
+.pomodoro-timer.running {
+  animation: timerPulse 1s ease-in-out infinite;
+}
+
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.75; }
+}
+
+/* ── STAT NUMBER COUNT-UP ── */
+.stat-card__num {
+  transition: color 0.3s;
+}
+
+/* ── DRAG-OVER FLASH ── */
+@keyframes dragOverPulse {
+  0%, 100% { outline-color: var(--accent); }
+  50%       { outline-color: var(--accent-2); }
+}
+
+.widget.drag-over {
+  animation: dragOverPulse 0.8s ease-in-out infinite;
+}
